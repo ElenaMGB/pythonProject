@@ -17,10 +17,14 @@ def get_english_words():
        english_words = soup.find("div", id="random_word").text.strip()
 #Получаем описание слова
        word_definition = soup.find("div", id="random_word_definition").text.strip()
+       #переводим
+       translator = Translator()
+       russian_words = translator.translate(english_words, dest='ru').text
 #Чтобы программа возвращала словарь
        return {
            "english_words": english_words,
-           "word_definition": word_definition
+           "word_definition": word_definition,
+           "russian_words": russian_words
        }
    #Функция, которая сообщит об ошибке, но не остановит программу
    except:
@@ -38,15 +42,21 @@ def word_game():
         word = word_dict.get("english_words")
         word_definition = word_dict.get("word_definition")
 
+        russian_words = word_dict.get("russian_words")
+        print(f"Значение слова - {word_definition}")
+        user = input("Что это за слово? ")
+
         # Начинаем игру
         translator = Translator()
         result = translator.translate(word, dest="ru")
         print(f"Значение слова - {word_definition}")
         user = input("Что это за слово? ")
+
         if user == word:
-            print(f"Все верно! по-русски: {result}")
+            print(f"Все верно! по-русски: {russian_words}")
         else:
-            print(f"Ответ неверный, было загадано это слово - {word}, по-русски: {result}")
+            print(f"Ответ неверный, было загадано это слово - {word}, по-русски: {russian_words}")
+
 
         # Создаём возможность закончить игру
         play_again = input("Хотите сыграть еще раз? y/n")
