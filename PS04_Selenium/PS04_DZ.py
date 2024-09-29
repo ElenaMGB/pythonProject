@@ -119,11 +119,30 @@ def search_wikipedia(query):
     return True
 
 # Функция для листания параграфов статьи
+# def print_paragraphs():
+#     paragraphs = browser.find_elements(By.CSS_SELECTOR, "div.mw-parser-output > p")
+#     for i, p in enumerate(paragraphs):
+#         print(f"\nПараграф {i + 1}:\n", p.text)
+#         if i % 3 == 2:  # Показываем по 3 параграфа за раз
+#             user_input = input("\nНажмите Enter для продолжения или введите 'q', чтобы вернуться к выбору: ")
+#             if user_input.lower() == 'q':
+#                 break
+
+
 def print_paragraphs():
     paragraphs = browser.find_elements(By.CSS_SELECTOR, "div.mw-parser-output > p")
+
+    if not paragraphs:
+        print("Нет параграфов в этой статье.")
+        return
+
     for i, p in enumerate(paragraphs):
-        print(f"\nПараграф {i + 1}:\n", p.text)
-        if i % 3 == 2:  # Показываем по 3 параграфа за раз
+        paragraph_text = p.text.strip()  # Убираем лишние пробелы
+        if paragraph_text:  # Проверяем, что параграф не пустой
+            print(f"\nПараграф {i + 1}:\n{paragraph_text}")
+
+        # Каждые 3 параграфа предлагаем пользователю продолжить или выйти
+        if (i + 1) % 3 == 0 or i == len(paragraphs) - 1:
             user_input = input("\nНажмите Enter для продолжения или введите 'q', чтобы вернуться к выбору: ")
             if user_input.lower() == 'q':
                 break
